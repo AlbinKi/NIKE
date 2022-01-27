@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Api.Model
 {
     public partial class Entry
-    {
+    {//tjena
         [Required]
         public long Id { get; set; }
         [Required]
