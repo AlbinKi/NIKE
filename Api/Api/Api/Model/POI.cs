@@ -50,9 +50,11 @@ namespace Api.Model
         public List<EntryDto> Entries { get; set; }
     }
 
-    public class FilterPOI : BaseFilter
+    public class FilterPOI
     {
         public string Name { get; set; }
+        public int Offset { get; set; }
+        public int Amount { get; set; } = 10;
         public string Country { get; set; }
         public string City { get; set; }
         public string Category { get; set; }

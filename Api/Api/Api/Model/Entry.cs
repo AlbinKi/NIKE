@@ -65,7 +65,7 @@ namespace Api.Model
     public class LikeDislikeEntryDto
     {
         public long Id { get; set; }
-        public EntryDto entry { get; set; }
+        public long EntryId { get; set; }
         public long Likes { get; set; }
         public long UserId { get; set; }
     }

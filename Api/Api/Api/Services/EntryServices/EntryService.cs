@@ -5,7 +5,7 @@ using AutoMapper;
 using System.Threading.Tasks;
 using System;
 using Api.Helpers;
-using System.Collections.Generic;
+
 
 namespace Api.Services.EntryServices
 {
@@ -126,45 +126,6 @@ namespace Api.Services.EntryServices
                 await _entryRepository.RemoveLike(like);
                 return _mapper.Map<LikeDislikeEntryDto>(like);
             }
-        }
-
-        public async Task<(List<CommentDTO> comments, int total)> GetComments(string apiKey, BaseFilter filter)
-        {
-            var user = await _userRepository.GetByApiKey(apiKey);
-            if (user == null) 
-            {
-                throw new UnauthorizedAccessException("Du har inte behörighet att visa detta."); 
-            }
-
-            var result = await _entryRepository.GetComments(user.Id, filter);
-
-            return (_mapper.Map<List<CommentDTO>>(result.comments), result.total);
-        }
-
-        public async Task<(List<LikeDislikeEntryDto> likes, int total)> GetLikes(string apiKey, BaseFilter filter)
-        {
-            var user = await _userRepository.GetByApiKey(apiKey);
-            if (user == null)
-            {
-                throw new UnauthorizedAccessException("Du har inte behörighet att visa detta.");
-            }
-
-            var result = await _entryRepository.GetLikes(user.Id, filter);
-
-            return (_mapper.Map<List<LikeDislikeEntryDto>>(result.likes), result.total);
-        }
-
-        public async Task<(List<EntryDto> entries, int total)> GetEntries(string apiKey, BaseFilter filter)
-        {
-            var user = await _userRepository.GetByApiKey(apiKey);
-            if (user == null)
-            {
-                throw new UnauthorizedAccessException("Du har inte behörighet att visa detta.");
-            }
-
-            var result = await _entryRepository.GetEntries(user.Id, filter);
-
-            return (_mapper.Map<List<EntryDto>>(result.entries), result.total);
         }
     }
 }

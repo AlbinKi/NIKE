@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Api.Exceptions;
@@ -130,11 +129,11 @@ namespace Api.Controllers
         }
 
         [HttpPost("like/:entryId")]
-        public async Task<IActionResult> AddLike(long entryId, [FromHeader] string apiKey)
+        public async Task<IActionResult> AddLike(long entryId, [FromHeader] string ApiKey)
         {
             try
             {
-                return Ok(new Response<LikeDislikeEntryDto>(await _service.AddLike(entryId, apiKey)));
+                return Ok(new Response<LikeDislikeEntryDto>(await _service.AddLike(entryId, ApiKey)));
             }
             catch (NotFoundException ex)
             {
@@ -143,98 +142,6 @@ namespace Api.Controllers
 #endif
                 return StatusCode((int)HttpStatusCode.NotFound, new Response<NotFoundException>(Status.Fail, ex.Message, ex));
             }
-        }
-
-       [HttpGet("comments")]
-       public async Task<IActionResult> GetComments([FromHeader] string apiKey, [FromQuery] BaseFilter filter)
-       {
-
-            var nextOffset = filter.Offset + filter.Amount;
-            var prevOffset = filter.Offset - filter.Amount;
-            var httpString = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host;
-
-            if (prevOffset < 0)
-            {
-                prevOffset = 0;
-            }
-
-            var result = await _service.GetComments(apiKey,filter);
-            var nextPage = httpString + $"/poi/list?offset={nextOffset}&amount={filter.Amount}";
-            var prevPage = httpString + $"/poi/list?offset={prevOffset}&amount={filter.Amount}";
-
-
-
-            if (filter.Offset == 0)
-            {
-
-                prevPage = null;
-            }
-
-            if (nextOffset >= result.total)
-            {
-                nextPage = null;
-            }
-            return Ok(new PaginationResponse<List<CommentDTO>>(result.comments, filter.Offset, filter.Amount, nextPage, prevPage, result.total));
-        }
-        [HttpGet("reactions")]
-       public async Task<IActionResult> GetReactions([FromHeader] string apiKey, [FromQuery] BaseFilter filter) 
-       {
-            var nextOffset = filter.Offset + filter.Amount;
-            var prevOffset = filter.Offset - filter.Amount;
-            var httpString = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host;
-
-            if (prevOffset < 0)
-            {
-                prevOffset = 0;
-            }
-
-            var result = await _service.GetComments(apiKey, filter);
-            var nextPage = httpString + $"/poi/list?offset={nextOffset}&amount={filter.Amount}";
-            var prevPage = httpString + $"/poi/list?offset={prevOffset}&amount={filter.Amount}";
-
-
-
-            if (filter.Offset == 0)
-            {
-
-                prevPage = null;
-            }
-
-            if (nextOffset >= result.total)
-            {
-                nextPage = null;
-            }
-            return Ok(new PaginationResponse<List<CommentDTO>>(result.comments, filter.Offset, filter.Amount, nextPage, prevPage, result.total));
-        }
-       [HttpGet("list")]
-       public async Task<IActionResult> GetEntries([FromHeader] string apiKey, [FromQuery] BaseFilter filter)
-       {
-            var nextOffset = filter.Offset + filter.Amount;
-            var prevOffset = filter.Offset - filter.Amount;
-            var httpString = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host;
-
-            if (prevOffset < 0)
-            {
-                prevOffset = 0;
-            }
-
-            var result = await _service.GetComments(apiKey, filter);
-            var nextPage = httpString + $"/poi/list?offset={nextOffset}&amount={filter.Amount}";
-            var prevPage = httpString + $"/poi/list?offset={prevOffset}&amount={filter.Amount}";
-
-
-
-            if (filter.Offset == 0)
-            {
-
-                prevPage = null;
-            }
-
-            if (nextOffset >= result.total)
-            {
-                nextPage = null;
-            }
-            return Ok(new PaginationResponse<List<CommentDTO>>(result.comments, filter.Offset, filter.Amount, nextPage, prevPage, result.total));
         }
     }
 }
