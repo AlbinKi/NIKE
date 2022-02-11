@@ -1,10 +1,13 @@
-﻿using NikeClientApp.Models;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NikeClientApp.Models;
 using NikeClientApp.Services;
 using NikeClientApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -69,6 +72,7 @@ namespace NikeClientApp.ViewModels
         {
             MapPage.CustomMap.MapType = MapType.Hybrid;
         }
+
 
         //Properties 
         #region Properties
@@ -219,7 +223,7 @@ namespace NikeClientApp.ViewModels
             AvgRating = null;
 
 
-            TitleResult = SearchBarText;
+            TitleResult = SearchBarText[0].ToString().ToUpper() + SearchBarText.Substring(1);
             POIListIsVisible = true;
             if (_titleResult == "Location")
             {
@@ -309,7 +313,7 @@ namespace NikeClientApp.ViewModels
         {
             string[] separator = { "\r\n" };
             string[] countryFromDataString = dataString.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-            return countryFromDataString[2];
+            return countryFromDataString.Last();
         }
 
         public string GetAddressFromDataString(string dataString)
@@ -425,7 +429,7 @@ namespace NikeClientApp.ViewModels
         private async Task ShowUserLikes()
         {
             ///TODO : implementera fetchUser metoden som finns i MAIN för att sätta x.UserId == UserId.
-            var listOfLikesFromUser = SelectedPOI.Entries.SelectMany(x => x.LikeDislikeEntries).Where(x => x.UserId == 7).ToList();
+            var listOfLikesFromUser = ListOfEntries.SelectMany(x => x.LikeDislikeEntries).Where(x => x.UserId == 7).ToList();
             if (listOfLikesFromUser != null)
             {
                 foreach (var itemEntry in ListOfEntries)

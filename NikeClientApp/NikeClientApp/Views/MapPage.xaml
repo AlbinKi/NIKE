@@ -19,7 +19,6 @@
                             <Entry x:Name="Searchbar" Text="{Binding SearchBarText}" 
                                     Focused="Searchbar_Focused" 
                                    Opacity="0.4"  Margin="0,0,0,0"  WidthRequest="160" />
-                            <!--Style="{StaticResource EntryColor}"-->
                         </Frame>
                         <ImageButton Source="Assets/gg.png" HeightRequest="40" VerticalOptions="EndAndExpand" Command="{Binding _SearchButton_Clicked}" />
                     </StackLayout>
